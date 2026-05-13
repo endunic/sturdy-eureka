@@ -440,7 +440,7 @@ def run_streamlit():
 
     with st.sidebar:
         st.header("⚙️ Strategy Settings")
-        interval = st.selectbox("Interval", ['1d', '4h', '1h'], index=0, help="Data aggregation interval.")
+        interval = st.selectbox("Interval", ['1d', '1h'], index=0, help="Data aggregation interval.")
         corr_threshold = st.slider("Min Correlation", 0.3, 0.9, DEFAULT_CORR, step=0.05, help="Minimum absolute correlation between returns for pairs to be considered.")
         p_value_threshold = st.slider("Max p-value", 0.001, 0.1, DEFAULT_PVAL, step=0.001, help="Maximum p-value for ADF test on spread to confirm cointegration.")
         z_window = st.slider("Z-Score Window", 20, 60, DEFAULT_WINDOW, help="Rolling window for Z-score calculation.")
