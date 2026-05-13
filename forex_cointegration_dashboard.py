@@ -74,17 +74,20 @@ def download_data(interval):
         if raw_data.empty:
             raise ValueError("Yahoo Finance (via yahooquery) returned empty data.")
 
-        # Pivot the long-format data to match the expected dashboard format
-        # columns = symbols, index = dates
+        # Detect available price column (yahooquery might return 'adjclose' or 'close')
+        price_col = 'adjclose' if 'adjclose' in raw_data.columns else 'close'
+        if price_col not in raw_data.columns:
+            raise ValueError(f"Required price columns missing. Found: {list(raw_data.columns)}")
+
         if isinstance(raw_data.index, pd.MultiIndex):
             processed_close = raw_data.reset_index().pivot(
                 index='date', 
                 columns='symbol', 
-                values='adjclose'
+                values=price_col
             )
         else:
             # Fallback if only one ticker is returned
-            processed_close = raw_data[['adjclose']]
+            processed_close = raw_data[[price_col]]
 
         processed_close = processed_close.ffill().dropna(how='all')
         
